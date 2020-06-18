@@ -1,7 +1,9 @@
 package com.example.korailauto;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,23 +26,40 @@ public class MainActivity extends AppCompatActivity {
     EditText txtDate;
     View.OnClickListener selDate;
     Spinner spnTime;
+    Context con;
     DatePickerDialog dialog;
     DatePickerDialog.OnDateSetListener dListener;
+    Train trains[];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tbl = findViewById(R.id.tblTrains);
-        Train train = new Train(this);
-        addRow(train);
+        con = this;
         initListener();
         initView();
         makeComboBox();
 
         txtDate.setOnClickListener(selDate);
+        new Thread(){
+            public void run(){
+                TrainListRequest tr = new TrainListRequest();
+                trains = tr.sendRequest("2020.06.19-금", "19", "서울", "수원").makeTrainList().getTrainList();
+                makeTable(trains);
+            }
+        }.start();
+    }
+
+    private void makeTable(Train trains[]){
+        for(Train train : trains) {
+            train.prepare(con);
+            addRow(train);
+            Log.d("[Log]", train.getStartInfo());
+        }
     }
 
     private void initView(){
+        tbl = findViewById(R.id.tblTrains);
         txtDate = findViewById(R.id.txtDate);
         spnTime = findViewById(R.id.spnTime);
         Calendar c = Calendar.getInstance();
@@ -54,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 Date date;
                 try {
                     date = new SimpleDateFormat("yyyy-mm-dd").parse(Integer.toString(year) + "-" + Integer.toString(month+1) + "-" + Integer.toString(dayOfMonth) + " 00:00:00");
-                    SimpleDateFormat sf = new SimpleDateFormat("yyyy.m.d-EE", Locale.KOREA);
+                    SimpleDateFormat sf = new SimpleDateFormat("yyyy.mm.dd-EE", Locale.KOREA);
                     txtDate.setText(sf.format(date));
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -74,9 +93,13 @@ public class MainActivity extends AppCompatActivity {
         spnTime.setAdapter(aad);
     }
 
-    private void addRow(Train train){
-        train.test();
-        tbl.addView(train.makeRow());
+    private void addRow(final Train train){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tbl.addView(train.makeRow());
+            }
+        });
     }
 
 }
