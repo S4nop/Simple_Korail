@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="234dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/lblDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="40dp"
+            android:text="Date"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/lblTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="40dp"
+            android:text="Time"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@+id/txtDate"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/lblFrom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="36dp"
+            android:text="FromTo"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblDate" />
+
+        <TextView
+            android:id="@+id/lblFrom2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="36dp"
+            android:text="->"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@+id/txtFrom"
+            app:layout_constraintTop_toBottomOf="@+id/lblDate" />
+
+        <EditText
+            android:id="@+id/txtDate"
+            android:layout_width="102dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="28dp"
+            android:ems="10"
+            android:focusable="false"
+            android:inputType="datetime"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.086"
+            app:layout_constraintStart_toEndOf="@+id/lblDate"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/txtFrom"
+            android:layout_width="102dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/lblFrom"
+            app:layout_constraintTop_toBottomOf="@+id/txtDate" />
+
+        <EditText
+            android:id="@+id/txtTo"
+            android:layout_width="102dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/lblFrom2"
+            app:layout_constraintTop_toBottomOf="@+id/txtDate" />
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_width="376dp"
+            android:layout_height="59dp"
+            android:layout_marginTop="20dp"
+            android:text="Search"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtFrom" />
+
+        <Spinner
+            android:id="@+id/spnTime"
+            android:layout_width="102dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="28dp"
+            android:gravity="center"
+            app:layout_constraintStart_toEndOf="@+id/lblTime"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="1046dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <TableLayout
+            android:id="@+id/tblTrains"
+            android:stretchColumns="*"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/black"
+                android:paddingTop="2sp"
+                android:paddingBottom="2sp">
+
+                <TextView
+                    android:id="@+id/lblttype"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:text="종류"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/lbldpTime"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:text="출발~도착"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/lblfrm"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:text="출발지"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/lblto"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:text="도착지"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/lblFee"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:text="요금"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/lblResv"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:text="예약하기"
+                    android:textSize="15sp" />
+            </TableRow>
+
+        </TableLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
