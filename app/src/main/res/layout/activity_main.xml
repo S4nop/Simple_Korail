@@ -154,24 +154,17 @@
                     android:textSize="15sp" />
 
                 <TextView
-                    android:id="@+id/lbldpTime"
-                    android:background="@android:color/white"
-                    android:gravity="center"
-                    android:text="출발~도착"
-                    android:textSize="15sp" />
-
-                <TextView
                     android:id="@+id/lblfrm"
                     android:background="@android:color/white"
                     android:gravity="center"
-                    android:text="출발지"
+                    android:text="출발"
                     android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/lblto"
                     android:background="@android:color/white"
                     android:gravity="center"
-                    android:text="도착지"
+                    android:text="도착"
                     android:textSize="15sp" />
 
                 <TextView
