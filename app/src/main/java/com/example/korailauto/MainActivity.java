@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -23,8 +24,9 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     TableLayout tbl;
-    EditText txtDate;
-    View.OnClickListener selDate;
+    EditText txtDate, txtFrom, txtTo;
+    Button btnSearch;
+    View.OnClickListener selDate, search;
     Spinner spnTime;
     Context con;
     DatePickerDialog dialog;
@@ -41,13 +43,15 @@ public class MainActivity extends AppCompatActivity {
         makeComboBox();
 
         txtDate.setOnClickListener(selDate);
-        new Thread(){
-            public void run(){
-                TrainListRequest tr = new TrainListRequest();
-                trains = tr.sendRequest("2020.06.19-금", "19", "서울", "수원").makeTrainList().getTrainList();
-                makeTable(trains);
+        btnSearch.setOnClickListener(search);
+    }
+    private void removeTable(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tbl.removeAllViews();
             }
-        }.start();
+        });
     }
 
     private void makeTable(Train trains[]){
@@ -62,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
         tbl = findViewById(R.id.tblTrains);
         txtDate = findViewById(R.id.txtDate);
         spnTime = findViewById(R.id.spnTime);
+        btnSearch = findViewById(R.id.btnSearch);
+        txtFrom = findViewById(R.id.txtFrom);
+        txtTo = findViewById(R.id.txtTo);
         Calendar c = Calendar.getInstance();
         dialog = new DatePickerDialog(this, dListener, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
     }
@@ -86,7 +93,21 @@ public class MainActivity extends AppCompatActivity {
                 dialog.show();
             }
         };
+        search = new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                new Thread(){
+                    public void run(){
+                        TrainMaker tr = new TrainMaker();
+                        trains = tr.makeTrainList(txtDate.getText().toString(), spnTime.getSelectedItem().toString(),
+                                txtFrom.getText().toString(), txtTo.getText().toString()).getTrainList();
+                        removeTable();
+                        makeTable(trains);
+                    }
+                }.start();
 
+            }
+        };
     }
     private void makeComboBox(){
         ArrayAdapter aad = ArrayAdapter.createFromResource(this, R.array.time, android.R.layout.simple_spinner_dropdown_item);
