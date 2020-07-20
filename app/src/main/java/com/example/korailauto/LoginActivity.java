@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
         initListener();
 
         btnLogin.setOnClickListener(loginListener);
+        Notificator notificator = new Notificator(this);
     }
 
     private void initView(){
