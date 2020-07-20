@@ -15,7 +15,6 @@ import java.util.Map;
 
 public class TrainListRequest {
     Elements reqResult;
-    Train trains[];
 
     public TrainListRequest sendRequest(String dateInfo, String time, String from, String to){
         String[] parsed = parseDate(dateInfo);
@@ -72,29 +71,8 @@ public class TrainListRequest {
         }
     }
 
-    public TrainListRequest makeTrainList(){
-        Elements elTrains = reqResult.select("tr");
-        int tSize = elTrains.size();
-        trains = new Train[tSize - 1];
-        for(int i = 0; i < tSize - 1; i++){
-            String param[] = parseTrainInfo(elTrains.eq(i + 1));
-            trains[i] = new Train(param[0], param[1], param[2], param[3]);
-        }
-        return this;
-    }
-
-    public Train[] getTrainList(){
-        return trains;
-    }
-
-    private String[] parseTrainInfo(Elements el){
-        String rslt[] = new String[4];
-        Elements tds = el.select("td");
-        rslt[0] = tds.eq(0).text();
-        rslt[1] = tds.eq(8).text();
-        rslt[2] = tds.eq(2).text();
-        rslt[3] = tds.eq(3).text();
-        return rslt;
+    public Elements getReqResult() {
+        return reqResult;
     }
 
     private String[] parseDate(String date){

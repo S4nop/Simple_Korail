@@ -9,4 +9,6 @@ public interface ITrain {
     public abstract String getStartInfo();
     public abstract String getEndInfo();
     public abstract TableRow makeRow();
+    public abstract String getTrainNum();
+    public abstract boolean chkReservable();
 }
