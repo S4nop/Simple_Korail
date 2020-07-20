@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi;
 
 public class Notificator {
     NotificationManager notificationManager;
+    NotificationChannel notificationChannel;
     PendingIntent intent;
     Context supCon;
 
@@ -24,7 +25,16 @@ public class Notificator {
     }
 
     public void showNotification(String title, String body, String ticker){
-        Notification.Builder builder = new Notification.Builder(supCon)
+        Notification.Builder builder;
+        notificationManager = (NotificationManager)supCon.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            setNoficiationChannel();
+            builder = new Notification.Builder(supCon, "train");
+        }
+        else builder = new Notification.Builder(supCon);
+
+        builder = builder
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setContentTitle(title)
                 .setContentText(body)
@@ -32,16 +42,13 @@ public class Notificator {
                 .setAutoCancel(true)
                 .setContentIntent(intent);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            setNoficiationChannel();
 
-        notificationManager = (NotificationManager)supCon.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, builder.build());
+        notificationManager.notify(123, builder.build());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setNoficiationChannel(){
-        NotificationChannel notificationChannel = new NotificationChannel("train", "ReserveAvailable", NotificationManager.IMPORTANCE_DEFAULT);
+        notificationChannel = new NotificationChannel("train", "ReserveAvailable", NotificationManager.IMPORTANCE_DEFAULT);
         notificationChannel.setDescription("Notification for your train reservable status");
         notificationChannel.enableLights(true);
         notificationChannel.setLightColor(Color.GREEN);
