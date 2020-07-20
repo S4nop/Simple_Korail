@@ -27,6 +27,9 @@
 
         <activity android:name=".MainActivity">
         </activity>
+        <service android:name="CheckerService">
+
+        </service>
     </application>
 
 </manifest>

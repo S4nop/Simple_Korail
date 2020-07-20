@@ -55,8 +55,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void makeTable(Train trains[]){
+        String date = txtDate.getText().toString();
+        String time = spnTime.getSelectedItem().toString();
+        String from = txtFrom.getText().toString();
+        String to = txtTo.getText().toString();
         for(Train train : trains) {
-            train.prepare(con);
+            train.prepare(con, date, time, from, to);
             addRow(train);
             Log.d("[Log]", train.getStartInfo());
         }
