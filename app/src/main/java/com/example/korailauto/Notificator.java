@@ -19,7 +19,7 @@ public class Notificator {
 
     public Notificator(Context supContext){
         supCon = supContext;
-        intent = PendingIntent.getActivity(supContext, 0, new Intent(supContext, MainActivity.class),
+        intent = PendingIntent.getActivity(supContext, 0, new Intent(supContext.getApplicationContext(), MainActivity.class),
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
     }

@@ -1,6 +1,7 @@
 package com.example.korailauto;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
@@ -11,6 +12,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class CheckerService extends Service {
+    Context con;
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -20,6 +22,7 @@ public class CheckerService extends Service {
     @Override
     public void onCreate(){
         Log.d("[LOG::Service]", "Service Created");
+        con = this;
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
@@ -45,10 +48,12 @@ public class CheckerService extends Service {
             @Override
             public void run(){
                 try {
-                    while(!chkTrainReservable(trainNum, date, time, from, to)){
+                    while(!chkTrainReservable(trainNum, date, time, from, to))
                         sleep(1000);
-                    }
+
                     Log.d("[LOG::Service]", "Now Reservable");
+                    Notificator notificator = new Notificator(con);
+                    notificator.showNotification("Train Available", "Train num " + trainNum + " is now available!!", "");
                     stopService(intent);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
