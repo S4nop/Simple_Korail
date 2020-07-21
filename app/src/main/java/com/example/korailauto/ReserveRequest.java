@@ -1,43 +1,17 @@
 package com.example.korailauto;
 
-import android.util.Log;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
-public class ReserveTrain {
-    Elements reqResult;
-    Map<String, String> requestData = new HashMap<>();
-
-    public ReserveTrain(String[] parsed, String hour, String yoil){
+public class ReserveRequest extends Request{
+    public ReserveRequest(String[] parsed, String hour, String yoil){
         makeRequestData(parsed, hour, yoil);
     }
 
-    public String request(Map<String, String> cookie){
-        Document resp = null;
-        try{
-            resp = Jsoup.connect("http://www.letskorail.com/ebizprd/EbizPrdTicketPr12111_i1.do")
-                    .timeout(3000)
-                    .header("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Whale/2.7.98.22 Safari/537.36")
-                    .header("Content-Type","application/x-www-form-urlencoded")
-                    .header("Host", "www.letskorail.com")
-                    .header("Origin", "http://www.letskorail.com")
-                    .header("Referer", "http://www.letskorail.com/ebizprd/EbizPrdTicketPr21111_i1.do")
-                    .cookies(cookie)
-                    .data(requestData)
-                    .post();
-            reqResult = resp.select(".mt40").select("td").eq(2);
-            return reqResult.toString();
-        }catch (IOException e){
-            e.printStackTrace();
-            Log.d("[Log]", "Failed to reserve Train");
-            return null;
-        }
+    //TODO : check reservation result using return value
+    public boolean reserve(Map<String, String> cookie){
+       return request("http://www.letskorail.com/ebizprd/EbizPrdTicketPr12111_i1.do", "http://www.letskorail.com",
+               "http://www.letskorail.com/ebizprd/EbizPrdTicketPr21111_i1.do", cookie) != null;
     }
 
     private void makeRequestData(String[] parsed, String hour, String yoil){
@@ -54,11 +28,11 @@ public class ReserveTrain {
         requestData.put("radJobId", "1");
         requestData.put("txtGoStart", parsed[19]);
         requestData.put("txtGoEnd", parsed[21]);
-        requestData.put("selGoYear", parsed[27].substring(0, 3)); //2020
-        requestData.put("selGoMonth", parsed[27].substring(4, 5)); //07
-        requestData.put("selGoDay", parsed[27].substring(6, 7));
+        requestData.put("selGoYear", parsed[27].substring(0, 4)); //2020
+        requestData.put("selGoMonth", parsed[27].substring(4, 6)); //07
+        requestData.put("selGoDay", parsed[27].substring(6, 8));
         requestData.put("selGoHour", hour);
-        requestData.put("selGoYoil", yoil);
+        requestData.put("txtGoYoil", yoil);
         requestData.put("selGoSeat1", "015");
         requestData.put("selGoSeat2", "015");
         requestData.put("txtPsgCnt1", "0");
@@ -79,7 +53,7 @@ public class ReserveTrain {
         requestData.put("txtSrcarCnt1", "0");
         requestData.put("hidRsvTpCd", "03");
         requestData.put("txtPsgTpCd1", "1");
-        requestData.put("txtPsgTpCd2", "1"); //3?
+        requestData.put("txtPsgTpCd2", "3"); //1?
         requestData.put("txtPsgTpCd3", "1");
         requestData.put("txtPsgTpCd5", "1");
         requestData.put("txtPsgTpCd7", "1");
@@ -103,7 +77,7 @@ public class ReserveTrain {
         requestData.put("txtArvStnConsOrdr1", parsed[45]);
         requestData.put("txtDptStnRunOrdr1", parsed[46]);
         requestData.put("txtArvStnRunOrdr1", parsed[47]);
-        requestData.put("txtPsrmClCd듯1", "1");
+        requestData.put("txtPsrmClCd1", "1");
         requestData.put("txtJrnySqno1", "001");
         requestData.put("txtJrnyTpCd1", "11");
         requestData.put("txtDptDt1", parsed[27]);

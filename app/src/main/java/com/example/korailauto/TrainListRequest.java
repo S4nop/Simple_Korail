@@ -1,78 +1,63 @@
 package com.example.korailauto;
 
 import android.text.TextUtils;
-import android.util.Log;
 
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
-public class TrainListRequest {
-    Elements reqResult;
-
-    public TrainListRequest sendRequest(String dateInfo, String time, String from, String to){
+public class TrainListRequest extends Request{
+    Elements parseResult;
+    public TrainListRequest sendRequest(String dateInfo, String time, String from, String to, Map<String, String> cookies){
         String[] parsed = parseDate(dateInfo);
-        Map<String, String> loginData = new HashMap<>();
-        loginData.put("txtGoStartCode", "");
-        loginData.put("txtGoEndCode", "0003");
-        loginData.put("radJobId", "1");
-        loginData.put("selGoTrain", "05");
-        loginData.put("txtSeatAttCd_4", "015");
-        loginData.put("txtSeatAttCd_3", "000");
-        loginData.put("txtSeatAttCd_2", "000");
-        loginData.put("txtPsgFlg_2", "0");
-        loginData.put("txtPsgFlg_3", "0");
-        loginData.put("txtPsgFlg_4", "0");
-        loginData.put("txtPsgFlg_5", "0");
-        loginData.put("chkCpn", "N");
-        loginData.put("selGoSeat1", "015");
-        loginData.put("selGoSeat2", "");
-        loginData.put("txtPsgCnt1", "1");
-        loginData.put("txtPsgCnt2", "0");
-        loginData.put("txtGoPage", "1");
-        loginData.put("txtGoAbrdDt", parsed[4]);
-        loginData.put("checkStnNm", "Y");
-        loginData.put("txtMenuId", "11");
-        loginData.put("SeandYo", "N");
-        loginData.put("txtGoStart", from);
-        loginData.put("txtGoEnd", to);
-        loginData.put("start", parsed[5]);
-        loginData.put("selGoHour", time);
-        loginData.put("txtGoHour", time + "0000");
-        loginData.put("selGoYear", parsed[0]);
-        loginData.put("selGoMonth", parsed[1]);
-        loginData.put("selGoDay", parsed[2]);
-        loginData.put("selGoYoil", parsed[3]);
-        loginData.put("txtPsgFlg_1", "1");
+        makeRequestData(parsed, time, from, to);
 
-        Document loginResp = null;
-        try {
-            loginResp = Jsoup.connect("http://www.letskorail.com/ebizprd/EbizPrdTicketPr21111_i1.do")
-                    .timeout(3000)
-                    .header("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Whale/2.7.98.22 Safari/537.36")
-                    .header("Content-Type","application/x-www-form-urlencoded")
-                    .header("Host", "www.letskorail.com")
-                    .header("Origin", "https://info.korail.com")
-                    .header("Referer", "https://letskorail.com/ebizprd/prdMain.do")
-                    .data(loginData)
-                    .post();
-            reqResult = loginResp.select("#tableResult");
+        if(request("http://www.letskorail.com/ebizprd/EbizPrdTicketPr21111_i1.do", "https://info.korail.com"
+        , "https://letskorail.com/ebizprd/prdMain.do", cookies) != null) {
+            parseResult = reqResult.select("#tableResult");
             return this;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.d("[Log]","Failed to get train list");
+        }
+        else{
             return null;
         }
     }
 
-    public Elements getReqResult() {
-        return reqResult;
+    public Elements getParseResult() {
+        return parseResult;
+    }
+
+    private void makeRequestData(String[] parsed, String time, String from, String to){
+        requestData.put("txtGoStartCode", "");
+        requestData.put("txtGoEndCode", "0003");
+        requestData.put("radJobId", "1");
+        requestData.put("selGoTrain", "05");
+        requestData.put("txtSeatAttCd_4", "015");
+        requestData.put("txtSeatAttCd_3", "000");
+        requestData.put("txtSeatAttCd_2", "000");
+        requestData.put("txtPsgFlg_2", "0");
+        requestData.put("txtPsgFlg_3", "0");
+        requestData.put("txtPsgFlg_4", "0");
+        requestData.put("txtPsgFlg_5", "0");
+        requestData.put("chkCpn", "N");
+        requestData.put("selGoSeat1", "015");
+        requestData.put("selGoSeat2", "");
+        requestData.put("txtPsgCnt1", "1");
+        requestData.put("txtPsgCnt2", "0");
+        requestData.put("txtGoPage", "1");
+        requestData.put("txtGoAbrdDt", parsed[4]);
+        requestData.put("checkStnNm", "Y");
+        requestData.put("txtMenuId", "11");
+        requestData.put("SeandYo", "N");
+        requestData.put("txtGoStart", from);
+        requestData.put("txtGoEnd", to);
+        requestData.put("start", parsed[5]);
+        requestData.put("selGoHour", time);
+        requestData.put("txtGoHour", time + "0000");
+        requestData.put("selGoYear", parsed[0]);
+        requestData.put("selGoMonth", parsed[1]);
+        requestData.put("selGoDay", parsed[2]);
+        requestData.put("selGoYoil", parsed[3]);
+        requestData.put("txtPsgFlg_1", "1");
     }
 
     private String[] parseDate(String date){

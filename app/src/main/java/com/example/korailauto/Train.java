@@ -2,30 +2,36 @@ package com.example.korailauto;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Train implements ITrain{
     private String type, fee;
     private String startInf;
     private String endInf;
     private String trainNum;
+    private String hour, date;
 
-    private String date, time, from, to;
+    private String[] scriptData;
+    private Map<String, String> cookies;
     private boolean isReservable;
     private TextView tv[];
     private Button reservBtn;
     private TableRow thisRow;
     private Context supCon;
 
-    public Train(String type, String fee, String si, String ei, String num, boolean rable){
+    public Train(String type, String fee, String si, String ei, String num, boolean rable, String[] scriptData){
         this.type = type;
         this.fee = fee;
+        this.scriptData = scriptData;
         startInf = si;
         endInf = ei;
         trainNum = num;
@@ -36,13 +42,27 @@ public class Train implements ITrain{
     @Override
     public boolean reserve() {
         Log.d("Train", ""+isReservable);
-        Intent intent = new Intent(supCon, CheckerService.class);
-        intent.putExtra("tNum", trainNum);
-        intent.putExtra("date", date);
-        intent.putExtra("time", time);
-        intent.putExtra("from", from);
-        intent.putExtra("to", to);
-        supCon.startService(intent);
+
+
+        if(isReservable)
+            new Thread(){
+                @Override
+                public void run(){
+                    ReserveRequest reserveRequest = new ReserveRequest(scriptData, hour, date.split("-")[1]);
+                    reserveRequest.reserve(cookies);
+                    makeToast("Reservation succeeded");
+                }
+            }.start();
+        else{
+            Intent intent = new Intent(supCon, CheckerService.class);
+            intent.putExtra("tNum", trainNum);
+            intent.putExtra("date", date);
+            intent.putExtra("from", scriptData[19]);
+            intent.putExtra("time", hour);
+            intent.putExtra("to", scriptData[21]);
+            intent.putExtra("cookies", (HashMap)cookies);
+            supCon.startService(intent);
+        }
         return false;
     }
 
@@ -87,12 +107,11 @@ public class Train implements ITrain{
         return isReservable;
     }
 
-    public void prepare(Context con, String date, String time, String from, String to){
-        supCon = con;
+    public void prepare(Context con, String date, String hour, Map<String, String> cookies){
+        this.hour = hour;
         this.date = date;
-        this.time = time;
-        this.from = from;
-        this.to = to;
+        this.cookies = cookies;
+        supCon = con;
         makeBtn();
         makeTv();
     }
@@ -117,5 +136,10 @@ public class Train implements ITrain{
         tv[1].setText(startInf);
         tv[2].setText(endInf);
         tv[3].setText(fee);
+    }
+
+    private void makeToast(String msg){
+        Toast toast = Toast.makeText(supCon, msg, Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

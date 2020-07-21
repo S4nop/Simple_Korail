@@ -11,6 +11,9 @@ import androidx.annotation.Nullable;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CheckerService extends Service {
     Context con;
     @Nullable
@@ -44,11 +47,12 @@ public class CheckerService extends Service {
         final String time = intent.getStringExtra("time");
         final String from = intent.getStringExtra("from");
         final String to = intent.getStringExtra("to");
+        final Map<String, String> cookies = (HashMap<String, String>)intent.getSerializableExtra("cookies");
         new Thread(){
             @Override
             public void run(){
                 try {
-                    while(!chkTrainReservable(trainNum, date, time, from, to))
+                    while(!chkTrainReservable(trainNum, date, time, from, to, cookies))
                         sleep(1000);
 
                     Log.d("[LOG::Service]", "Now Reservable");
@@ -62,9 +66,9 @@ public class CheckerService extends Service {
         }.start();
     }
 
-    private boolean chkTrainReservable(String trainNum, String date, String time, String from, String to){
+    private boolean chkTrainReservable(String trainNum, String date, String time, String from, String to, Map<String, String> cookies){
         TrainListRequest tr = new TrainListRequest();
-        Elements elTrains = tr.sendRequest(date, time, from, to).getReqResult().select("tr");
+        Elements elTrains = tr.sendRequest(date, time, from, to, cookies).getReqResult().select("tr");
         for(Element el : elTrains){
             if(el.select("td").eq(1).text().equals(trainNum))
                 return el.select("td").toString().split("alt=\"")[1].split("\"")[0].equals("예약하기");

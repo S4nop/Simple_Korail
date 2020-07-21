@@ -19,7 +19,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     Context con;
     DatePickerDialog dialog;
     DatePickerDialog.OnDateSetListener dListener;
+    Map<String, String> cookies;
     Train trains[];
 
     @Override
@@ -38,12 +41,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         con = this;
+        cookies = (HashMap<String, String>)getIntent().getSerializableExtra("hashMap");
         initListener();
         initView();
         makeComboBox();
 
         txtDate.setOnClickListener(selDate);
         btnSearch.setOnClickListener(search);
+    }
+
+    public Map<String, String> getCookies(){
+        return cookies;
     }
     private void removeTable(){
         runOnUiThread(new Runnable() {
@@ -57,10 +65,8 @@ public class MainActivity extends AppCompatActivity {
     private void makeTable(Train trains[]){
         String date = txtDate.getText().toString();
         String time = spnTime.getSelectedItem().toString();
-        String from = txtFrom.getText().toString();
-        String to = txtTo.getText().toString();
         for(Train train : trains) {
-            train.prepare(con, date, time, from, to);
+            train.prepare(con, date, time, cookies);
             addRow(train);
             Log.d("[Log]", train.getStartInfo());
         }
@@ -104,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run(){
                         TrainMaker tr = new TrainMaker();
                         trains = tr.makeTrainList(txtDate.getText().toString(), spnTime.getSelectedItem().toString(),
-                                txtFrom.getText().toString(), txtTo.getText().toString()).getTrainList();
+                                txtFrom.getText().toString(), txtTo.getText().toString(), cookies).getTrainList();
                         removeTable();
                         makeTable(trains);
                     }
