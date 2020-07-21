@@ -18,7 +18,7 @@ public class ReserveTrain {
         makeRequestData();
     }
 
-    public String request(String cookie){
+    public String request(Map<String, String> cookie){
         Document resp = null;
         try{
             resp = Jsoup.connect("http://www.letskorail.com/ebizprd/EbizPrdTicketPr12111_i1.do")
@@ -28,7 +28,7 @@ public class ReserveTrain {
                     .header("Host", "www.letskorail.com")
                     .header("Origin", "http://www.letskorail.com")
                     .header("Referer", "http://www.letskorail.com/ebizprd/EbizPrdTicketPr21111_i1.do")
-                    .header("Cookie", cookie)
+                    .cookies(cookie)
                     .data(requestData)
                     .post();
             reqResult = resp.select(".mt40").select("td").eq(2);
