@@ -14,8 +14,8 @@ public class ReserveTrain {
     Elements reqResult;
     Map<String, String> requestData = new HashMap<>();
 
-    public ReserveTrain(){
-        makeRequestData();
+    public ReserveTrain(String[] parsed, String hour, String yoil){
+        makeRequestData(parsed, hour, yoil);
     }
 
     public String request(Map<String, String> cookie){
@@ -40,34 +40,33 @@ public class ReserveTrain {
         }
     }
 
-    private void makeRequestData(){
+    private void makeRequestData(String[] parsed, String hour, String yoil){
         requestData.put("selGoTrain", "05");
-        requestData.put("txtSeatAttCd_4", "015");
-        requestData.put("txtSeatAttCd_3", "000");
-        requestData.put("txtSeatAttCd_2", "000");
         requestData.put("txtPsgFlg_1", "1");
         requestData.put("txtPsgFlg_2", "0");
         requestData.put("txtPsgFlg_3", "0");
         requestData.put("txtPsgFlg_4", "0");
         requestData.put("txtPsgFlg_5", "0");
+        requestData.put("txtSeatAttCd_3", "000");
+        requestData.put("txtSeatAttCd_2", "000");
+        requestData.put("txtSeatAttCd_4", "015");
         requestData.put("selGoTrainRa", "05");
         requestData.put("radJobId", "1");
+        requestData.put("txtGoStart", parsed[19]);
+        requestData.put("txtGoEnd", parsed[21]);
+        requestData.put("selGoYear", parsed[27].substring(0, 3)); //2020
+        requestData.put("selGoMonth", parsed[27].substring(4, 5)); //07
+        requestData.put("selGoDay", parsed[27].substring(6, 7));
+        requestData.put("selGoHour", hour);
+        requestData.put("selGoYoil", yoil);
         requestData.put("selGoSeat1", "015");
         requestData.put("selGoSeat2", "015");
         requestData.put("txtPsgCnt1", "0");
         requestData.put("txtPsgCnt2", "0");
         requestData.put("txtGoPage", "1");
-        requestData.put("txtGoAbrdDt", "20200724");
-        requestData.put("checkStnNm", "Y");
-        requestData.put("txtMenuId", "11");
-        requestData.put("txtGoStart", "서울");
-        requestData.put("txtGoEnd", "수원");
-        requestData.put("selGoHour", "19");
-        requestData.put("selGoYear", "2020");
-        requestData.put("selGoMonth", "07");
-        requestData.put("selGoDay", "24");
-        requestData.put("selGoYoil","금");
+        requestData.put("txtGoAbrdDt", parsed[27]); //20200724
         requestData.put("chkInitFlg", "Y");
+        requestData.put("txtMenuId", "11");
         requestData.put("ra", "1");
         requestData.put("txtSeatAttCd1", "000");
         requestData.put("txtSeatAttCd2", "000");
@@ -80,7 +79,7 @@ public class ReserveTrain {
         requestData.put("txtSrcarCnt1", "0");
         requestData.put("hidRsvTpCd", "03");
         requestData.put("txtPsgTpCd1", "1");
-        requestData.put("txtPsgTpCd2", "1");
+        requestData.put("txtPsgTpCd2", "1"); //3?
         requestData.put("txtPsgTpCd3", "1");
         requestData.put("txtPsgTpCd5", "1");
         requestData.put("txtPsgTpCd7", "1");
@@ -100,24 +99,24 @@ public class ReserveTrain {
         requestData.put("txtCompaCnt7", "0");
         requestData.put("txtJobId", "1101");
         requestData.put("txtJrnyCnt", "1");
-        requestData.put("txtDptStnConsOrdr1", "000001");
-        requestData.put("txtArvStnConsOrdr1", "000009");
-        requestData.put("txtDptStnRunOrdr1", "000001");
-        requestData.put("txtArvStnRunOrdr1", "000003");
-        requestData.put("txtPsrmClCd1", "1");
+        requestData.put("txtDptStnConsOrdr1", parsed[44]);//여기인
+        requestData.put("txtArvStnConsOrdr1", parsed[45]);
+        requestData.put("txtDptStnRunOrdr1", parsed[46]);
+        requestData.put("txtArvStnRunOrdr1", parsed[47]);
+        requestData.put("txtPsrmClCd듯1", "1");
         requestData.put("txtJrnySqno1", "001");
         requestData.put("txtJrnyTpCd1", "11");
-        requestData.put("txtDptDt1", "20200724");
-        requestData.put("txtDptRsStnCd1", "0001");
-        requestData.put("txtDptRsStnCdNm1", "서울");
-        requestData.put("txtDptTm1", "191400");
-        requestData.put("txtArvRsStnCd1", "0003");
-        requestData.put("txtArvRsStnCdNm1", "수원");
-        requestData.put("txtArvTm1", "194300");
-        requestData.put("txtTrnNo1", "01033");
-        requestData.put("txtRunDt1", "20200724");
-        requestData.put("txtTrnClsfCd1", "08");
-        requestData.put("txtTrnGpCd1", "101");
+        requestData.put("txtDptDt1", parsed[27]);
+        requestData.put("txtDptRsStnCd1", parsed[18]); //0003?
+        requestData.put("txtDptRsStnCdNm1", parsed[19]);
+        requestData.put("txtDptTm1", parsed[29]); //출발시간이네
+        requestData.put("txtArvRsStnCd1", parsed[20]); //0104?
+        requestData.put("txtArvRsStnCdNm1", parsed[21]);
+        requestData.put("txtArvTm1", parsed[31]); //도착시간
+        requestData.put("txtTrnNo1", parsed[22]); //01033
+        requestData.put("txtRunDt1", parsed[27]);
+        requestData.put("txtTrnClsfCd1", parsed[24]); //02
+        requestData.put("txtTrnGpCd1", parsed[25]); //102
         requestData.put("txtChgFlg1", "N");
     }
 }

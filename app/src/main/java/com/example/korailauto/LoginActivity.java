@@ -55,8 +55,6 @@ public class LoginActivity extends AppCompatActivity {
         if((cookie = kf.loginKorail(txtID.getText().toString(), txtPW.getText().toString())) != null){
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.putExtra("hashMap", (HashMap)cookie);
-            ReserveTrain reserveTrain = new ReserveTrain();
-            Log.d("TEST", reserveTrain.request(cookie));
             startActivity(intent);
         }
 
