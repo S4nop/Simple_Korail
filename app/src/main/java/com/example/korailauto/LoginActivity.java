@@ -53,11 +53,11 @@ public class LoginActivity extends AppCompatActivity {
     private void login_and_move(){
         LoginRequest kf = new LoginRequest();
         Map<String, String> cookie;
-        //if((cookie = kf.loginKorail(txtID.getText().toString(), txtPW.getText().toString())) != null){
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        //intent.putExtra("hashMap", (HashMap)cookie);
-        startActivity(intent);
-        //}
+        if((cookie = kf.loginKorail(txtID.getText().toString(), txtPW.getText().toString())) != null){
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra("hashMap", (HashMap)cookie);
+            startActivity(intent);
+        }
 
     }
 }
