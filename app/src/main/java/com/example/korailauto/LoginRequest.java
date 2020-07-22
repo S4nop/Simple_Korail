@@ -9,16 +9,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginRequest {
+public class LoginRequest{
+    Map<String, String> loginData = new HashMap<>();
+
     public Map<String, String> loginKorail(String id, String pw) {
-        Map<String, String> loginData = new HashMap<>();
-        loginData.put("selInputFlg", "2");
-        loginData.put("radIngrDvCd", "2");
-        loginData.put("ret_url", "/mbs/www/index.jsp");
-        loginData.put("hidMemberFlg", "1");
-        loginData.put("UserId", id);
-        loginData.put("UserPwd", pw);
-        loginData.put("txtDv", "2");
+        makeLoginData(id, pw);
 
         Connection.Response loginResp = null;
         try {
@@ -43,5 +38,13 @@ public class LoginRequest {
         return null;
     }
 
-
+    public void makeLoginData(String id, String pw){
+        loginData.put("selInputFlg", "2");
+        loginData.put("radIngrDvCd", "2");
+        loginData.put("ret_url", "/mbs/www/index.jsp");
+        loginData.put("hidMemberFlg", "1");
+        loginData.put("UserId", id);
+        loginData.put("UserPwd", pw);
+        loginData.put("txtDv", "2");
+    }
 }
